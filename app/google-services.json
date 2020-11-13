@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "18692800957",
+    "firebase_url": "https://chat-f63c7.firebaseio.com",
+    "project_id": "chat-f63c7",
+    "storage_bucket": "chat-f63c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18692800957:android:1d11ae07715de0d0fe52d4",
+        "android_client_info": {
+          "package_name": "com.example.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18692800957-p6m16jn539ouec93rj14nlkhg7ajukva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEmFKRJrablpSGKP2l4IpLfiJhQZN9Igs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18692800957-p6m16jn539ouec93rj14nlkhg7ajukva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18692800957:android:ac4de1bae111322ffe52d4",
+        "android_client_info": {
+          "package_name": "com.example.contactos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18692800957-p6m16jn539ouec93rj14nlkhg7ajukva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEmFKRJrablpSGKP2l4IpLfiJhQZN9Igs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18692800957-p6m16jn539ouec93rj14nlkhg7ajukva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
