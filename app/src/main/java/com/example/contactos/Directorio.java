@@ -42,12 +42,9 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
 
 
         id = getIntent().getExtras().getString("id");
-        Log.e("valor",""+id);
-
 
         adapter = new ContactoAdapter();
         listaContactos.setAdapter(adapter);
-
         agregar.setOnClickListener(this);
 
         loadData();
@@ -68,9 +65,6 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
                              adapter.addContacto(contac);
 
                          }
-
-
-
                      }
 
                      @Override
@@ -80,13 +74,7 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
                  }
 
          );
-
-
-
-
-
-
-
+         
     }
 
 
@@ -108,5 +96,12 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
 
         reference.setValue(contac);
 
+    }
+
+    @Override
+    protected void onPause() {
+
+
+        super.onPause();
     }
 }

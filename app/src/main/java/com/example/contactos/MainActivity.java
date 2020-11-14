@@ -42,34 +42,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void LoadData(){
+        Intent i = new Intent(this, Directorio.class);
 
         db.getReference().child("Directorio").child("usuario").orderByChild("name").equalTo(name.getText().toString()).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot data) {
 
-                        for(DataSnapshot child: data.getChildren()){
+                        if(data.exists()){
 
-                            User usuario = child.getValue(User.class);
-                            pushID = usuario.getId();
-                            nameData = usuario.getName()+"";
-                            Log.e("data2",pushID);
-                        }
-                            String input = name.getText().toString();
+                            for(DataSnapshot child: data.getChildren()){
 
-                    if(nameData != null){
+                                User usuario = child.getValue(User.class);
+                                pushID = usuario.getId();
+                            }
 
-                        if(nameData.equals(input)){
-                            create = false;
-                            cambio = true;
                         } else {
-                            create = true;
-                            cambio = true;
+
+                            String id = db.getReference().child("usuario").push().getKey();
+                            DatabaseReference reference = db.getReference().child("Directorio").child("usuario").child(id);
+
+                            Map<String,String> user = new HashMap<>();
+                            user.put("name", name.getText().toString());
+                            user.put("id",id);
+
+                            reference.setValue(user);
+                            Log.e("dataNueva","name"+name.getText().toString());
+
                         }
-                    }else {
-                        create = true;
-                        cambio = true;
-                    }
+
+                        String input = name.getText().toString();
+                        i.putExtra("id",pushID);
+                        startActivity(i);
 
                     }
 
@@ -82,38 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
 
 
-        validar();
-
-    }
-
-    public void validar(){
-
-        if(create == true){
-
-            String id = db.getReference().child("usuario").push().getKey();
-            DatabaseReference reference = db.getReference().child("Directorio").child("usuario").child(id);
-
-            Map<String,String> user = new HashMap<>();
-            user.put("name", name.getText().toString());
-            user.put("id",id);
-
-            reference.setValue(user);
-            Log.e("dataNueva","name"+name.getText().toString());
-            cambio = true;
-
-        }
-
-        if(cambio == true){
-            Intent i = new Intent(this, Directorio.class);
-            i.putExtra("id",pushID);
-            startActivity(i);
-        }
-
     }
 
     @Override
     public void onClick(View view) {
-
 
         LoadData();
 
