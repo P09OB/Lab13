@@ -53,7 +53,7 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
 
     public void loadData(){
 
-         db.getReference().child("Directorio").child("contactos").child(id).orderByChild("id").equalTo(id).addValueEventListener(
+         db.getReference().child("Directorio").child("contactos").child(id).orderByChild("idPush").equalTo(id).addValueEventListener(
 
                  new ValueEventListener() {
                      @Override
@@ -74,7 +74,7 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
                  }
 
          );
-         
+
     }
 
 
@@ -88,6 +88,7 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
 
         Contacto contac = new Contacto(
 
+                id2,
                 id,
                 nombreContacto.getText().toString(),
                 telefono.getText().toString()
@@ -95,6 +96,8 @@ public class Directorio extends AppCompatActivity implements View.OnClickListene
         );
 
         reference.setValue(contac);
+        nombreContacto.setText("");
+        telefono.setText("");
 
     }
 

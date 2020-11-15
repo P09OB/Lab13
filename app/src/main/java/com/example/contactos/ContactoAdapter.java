@@ -76,9 +76,9 @@ public class ContactoAdapter extends BaseAdapter {
         borrar.setOnClickListener(
 
                 (v)->{
-
                     String id = contact.getId();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Directorio").child("contactos").child(id);
+                    String idPush = contact.getIdPush();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Directorio").child("contactos").child(idPush).child(id);
                     ref.setValue(null);
 
                 }

@@ -2,17 +2,27 @@ package com.example.contactos;
 
 public class Contacto {
 
+    String idPush;
     String id;
     String nombre;
     String telefono;
 
-    public Contacto(String id, String nombre, String telefono) {
+    public Contacto(String id, String idPush,String nombre, String telefono) {
         this.id = id;
+        this.idPush = idPush;
         this.nombre = nombre;
         this.telefono = telefono;
     }
 
     public Contacto() {
+    }
+
+    public String getIdPush() {
+        return idPush;
+    }
+
+    public void setIdPush(String idPush) {
+        this.idPush = idPush;
     }
 
     public String getId() {

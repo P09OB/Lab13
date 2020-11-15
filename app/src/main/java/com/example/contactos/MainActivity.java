@@ -24,9 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseDatabase db;
     private Button ingresarBu;
     private EditText name;
-    private String pushID,nameData;
-    private boolean cambio = false;
-    private boolean create = false;
+    private String pushID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +63,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Map<String,String> user = new HashMap<>();
                             user.put("name", name.getText().toString());
                             user.put("id",id);
-
+                            pushID = id;
                             reference.setValue(user);
                             Log.e("dataNueva","name"+name.getText().toString());
 
+
+
                         }
 
-                        String input = name.getText().toString();
                         i.putExtra("id",pushID);
                         startActivity(i);
+                        name.setText("");
+
 
                     }
 

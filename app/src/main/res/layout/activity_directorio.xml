@@ -37,7 +37,7 @@
         android:layout_marginTop="18dp"
         android:ems="10"
         android:hint="Telefono"
-        android:inputType="textPersonName"
+        android:inputType="number|textPersonName|numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
