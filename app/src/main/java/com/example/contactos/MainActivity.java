@@ -1,6 +1,7 @@
 package com.example.contactos;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,7 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,10 +25,17 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private ContactoAdapter adapter;
+    private ListView listaContactos;
+    private EditText telefono;
+    private Button agregar;
+    private Button logOut;
+    private EditText nombreContacto;
+    private TextView nameUser;
     private FirebaseDatabase db;
-    private Button ingresarBu;
-    private EditText name;
-    private String pushID;
+    private FirebaseAuth auth;
+    private String id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,68 +43,157 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         db = FirebaseDatabase.getInstance();
-        ingresarBu = findViewById(R.id.ingresarButton);
-        name = findViewById(R.id.inputUser);
+        auth = FirebaseAuth.getInstance();
+
+        if(auth.getCurrentUser()== null){
+
+            goToLgin();
+
+        } else {
+
+            listaContactos = findViewById(R.id.contactos);
+            nombreContacto = findViewById(R.id.inputName);
+            telefono = findViewById(R.id.inputTel);
+            agregar = findViewById(R.id.agregarButton);
+            logOut = findViewById(R.id.logOut);
+            nameUser = findViewById(R.id.nameUser);
+            id = auth.getCurrentUser().getUid();
 
 
-        ingresarBu.setOnClickListener(this);
+
+            adapter = new ContactoAdapter();
+            listaContactos.setAdapter(adapter);
+            agregar.setOnClickListener(this);
+            logOut.setOnClickListener(this);
+
+
+            loadData();
+
+
+        }
+
     }
 
-    public void LoadData(){
-        Intent i = new Intent(this, Directorio.class);
+    private void goToLgin() {
 
-        db.getReference().child("Directorio").child("usuario").orderByChild("name").equalTo(name.getText().toString()).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot data) {
-
-                        if(data.exists()){
-
-                            for(DataSnapshot child: data.getChildren()){
-
-                                User usuario = child.getValue(User.class);
-                                pushID = usuario.getId();
-                            }
-
-                        } else {
-
-                            String id = db.getReference().child("usuario").push().getKey();
-                            DatabaseReference reference = db.getReference().child("Directorio").child("usuario").child(id);
-
-                            Map<String,String> user = new HashMap<>();
-                            user.put("name", name.getText().toString());
-                            user.put("id",id);
-                            pushID = id;
-                            reference.setValue(user);
-                            Log.e("dataNueva","name"+name.getText().toString());
+        Intent i = new Intent(this,Login.class);
+        startActivity(i);
+        finish();
 
 
+    }
+
+    public void loadData(){
+
+        if(auth.getCurrentUser() != null){
+            id = auth.getCurrentUser().getUid();
+
+            db.getReference().child("Lab14").child("users").child(id).addListenerForSingleValueEvent(
+
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange( DataSnapshot snapshot) {
+
+                            User user = snapshot.getValue(User.class);
+                            nameUser.setText("Bienvenido"+" "+user.getNombre());
 
                         }
 
-                        i.putExtra("id",pushID);
-                        startActivity(i);
-                        name.setText("");
+                        @Override
+                        public void onCancelled( DatabaseError error) {
+
+                        }
+                    }
+            );
 
 
+                    db.getReference().child("Lab14").child("contactos").child(id).addValueEventListener(
+
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange( DataSnapshot data) {
+
+                            adapter.clear();
+                            for(DataSnapshot child : data.getChildren()){
+                                Contacto contac = child.getValue(Contacto.class);
+                                adapter.addContacto(contac);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled( DatabaseError error) {
+
+                        }
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            );
+        }
 
-                    }
-                }
 
-        );
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+
+            case R.id.logOut:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+
+                        .setTitle("Cerra sesión")
+                        .setMessage("¿Estas seguro que desea cerrar sesión?")
+                        .setNegativeButton("No",(dialog, id) ->{
+
+                            dialog.dismiss();
+
+                        } )
+
+                        .setPositiveButton("Si",(dialog, id) -> {
+
+                            auth.signOut();
+                            goToLgin();
+
+                        });
+
+                builder.show();
+                break;
+
+
+            case R.id.agregarButton:
+
+                String id2 = db.getReference().child("usuario").push().getKey();
+                DatabaseReference reference = db.getReference().child("Lab14").child("contactos").child(id).child(id2);
+
+                Contacto contac = new Contacto(
+
+                        id2,
+                        id,
+                        nombreContacto.getText().toString(),
+                        telefono.getText().toString()
+
+                );
+
+                reference.setValue(contac);
+                nombreContacto.setText("");
+                telefono.setText("");
+
+                break;
+        }
+
+
 
 
     }
 
     @Override
-    public void onClick(View view) {
+    protected void onPause() {
 
-        LoadData();
 
+        super.onPause();
     }
 
 

@@ -78,7 +78,7 @@ public class ContactoAdapter extends BaseAdapter {
                 (v)->{
                     String id = contact.getId();
                     String idPush = contact.getIdPush();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Directorio").child("contactos").child(idPush).child(id);
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Lab14").child("contactos").child(idPush).child(id);
                     ref.setValue(null);
 
                 }
